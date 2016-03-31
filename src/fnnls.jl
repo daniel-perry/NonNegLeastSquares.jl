@@ -13,8 +13,10 @@ References:
     Bro R, De Jong S. A fast non-negativitity-constrained least squares
     algorithm. Journal of Chemometrics. 11, 393–401 (1997)
 """
-function fnnls(AtA::Matrix{Float64},
-               Atb::Vector{Float64};
+#function fnnls(AtA::Matrix{Float64},
+#               Atb::Vector{Float64};
+function fnnls(AtA::AbstractMatrix,
+               Atb::AbstractVector;
                tol::Float64=1e-8,
                max_iter=30*size(AtA,2))
 
@@ -58,11 +60,12 @@ function fnnls(AtA::Matrix{Float64},
             x += α*(s-x)
 
             # Remove all i in P where x[i] == 0
-            for i = 1:n
-                if P[i] && abs(x[i]) < tol
-                    P[i] = false # remove i from P
-                end
-            end
+            #for i = 1:n
+            #    if P[i] && abs(x[i]) < tol
+            #        P[i] = false # remove i from P
+            #    end
+            #end
+						P[find( P & (abs(x) .< tol) )] = false
 
             # Solve least-squares problem again, zeroing nonpositive columns
             s[P] = AtA[P,P] \ Atb[P]
@@ -70,14 +73,17 @@ function fnnls(AtA::Matrix{Float64},
         end
 
         # update solution
-        x = deepcopy(s)
-        w = Atb - AtA*x
+        #x = deepcopy(s)
+        x[:] = s
+        w[:] = Atb - AtA*x
     end
     return x
 end
 
-function fnnls(A::Matrix{Float64},
-               B::Matrix{Float64};
+#function fnnls(A::Matrix{Float64},
+#               B::Matrix{Float64};
+function fnnls(A::AbstractMatrix,
+               B::AbstractMatrix;
 							 Gram::Bool = false,
                kwargs...)
 

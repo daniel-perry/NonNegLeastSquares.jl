@@ -12,8 +12,10 @@ References:
     Lawson, C.L. and R.J. Hanson, Solving Least-Squares Problems,
     Prentice-Hall, Chapter 23, p. 161, 1974.
 """
-function nnls(A::Matrix{Float64},
-              b::Vector{Float64};
+#function nnls(A::Matrix{Float64},
+#              b::Vector{Float64};
+function nnls(A::AbstractMatrix,
+              b::AbstractVector;
               tol::Float64=1e-8,
               max_iter=30*size(A,2))
 
@@ -80,8 +82,10 @@ function nnls(A::Matrix{Float64},
     return x
 end
 
-function nnls(A::Matrix{Float64},
-              B::Matrix{Float64};
+#function nnls(A::Matrix{Float64},
+#              B::Matrix{Float64};
+function nnls(A::AbstractMatrix,
+              B::AbstractMatrix;
               kwargs...)
 
     m,n = size(A)

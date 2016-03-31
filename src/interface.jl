@@ -24,8 +24,10 @@ Optional arguments
 
 """
 function nonneg_lsq(
-	A::Matrix{Float64},
-	B::Matrix{Float64};
+	#A::Matrix{Float64},
+	#B::Matrix{Float64};
+	A::AbstractMatrix,
+	B::AbstractMatrix;
 	alg::Symbol = :pivot,
 	variant::Symbol = :none,
 	Gram::Bool = false,
